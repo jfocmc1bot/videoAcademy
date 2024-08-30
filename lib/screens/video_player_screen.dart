@@ -31,24 +31,9 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    print("Video URL: ${widget.videoUrl}");
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-      DeviceOrientation.portraitDown,
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]);
-
     final videoId = YoutubePlayer.convertUrlToId(widget.videoUrl);
-    print("Extracted Video ID: $videoId");
 
-    if (videoId == null) {
-      print("Failed to extract video ID from URL");
-      // Lidar com o erro, talvez mostrando uma mensagem ao usuário
-      return;
-    }
-
-    try {
+    if (videoId != null) {
       _controller = YoutubePlayerController(
         initialVideoId: videoId,
         flags: const YoutubePlayerFlags(
@@ -56,10 +41,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           mute: false,
         ),
       )..addListener(_listener);
-    } catch (e) {
-      print("Error initializing YouTube player: $e");
-      // Lidar com o erro, talvez mostrando uma mensagem ao usuário
     }
+
     _playStartTime = DateTime.now();
     _logVideoPlay();
   }
@@ -124,13 +107,6 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_controller == null) {
-      return Scaffold(
-        appBar: AppBar(title: Text('Erro')),
-        body: Center(child: Text('Não foi possível inicializar o player')),
-      );
-    }
-
     return YoutubePlayerBuilder(
       player: YoutubePlayer(
         controller: _controller,
@@ -150,30 +126,36 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
         },
       ),
       builder: (context, player) => Scaffold(
-        appBar: _buildAppBar(),
-        body: _buildBody(player),
-        backgroundColor: Colors.black,
+        appBar: AppBar(
+          title: Text(widget.videoTitle),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.of(context).pop(),
+          ),
+        ),
+        body: Stack(
+          fit: StackFit.expand,
+          children: [
+            Container(
+              color: Colors.black,
+              child: Center(child: player),
+            ),
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: AppBar(
+                title: Text(widget.videoTitle),
+                backgroundColor: Colors.transparent,
+                leading: IconButton(
+                  icon: Icon(Icons.arrow_back),
+                  onPressed: () => Navigator.of(context).pop(),
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
-  }
-
-  AppBar _buildAppBar() {
-    return AppBar(
-      title: const Text('Reproduzir Vídeo', style: TextStyle(fontSize: 22)),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          _logVideoEnd();
-          Navigator.of(context)
-              .pop(); // Retorna ao pressionar o botão de voltar
-        },
-        color: Colors.white,
-        iconSize: 30,
-      ),
-    );
-  }
-
-  Widget _buildBody(Widget player) {
-    return Center(child: player);
   }
 }
