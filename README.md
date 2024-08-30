@@ -2,6 +2,10 @@
 
 Este módulo fornece funcionalidades para listar e reproduzir vídeos, com suporte a múltiplos idiomas e integração com o Firebase.
 
+
+https://github.com/user-attachments/assets/e6298c98-762f-4afe-b830-9e74296e5556
+
+
 ```
 lib/
 │
