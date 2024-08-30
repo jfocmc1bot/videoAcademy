@@ -1,5 +1,4 @@
 // lib/main.dart
-// autho: Julio Fabio
 
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -26,24 +25,26 @@ class MyApp extends StatelessWidget {
       title: 'Video App',
       theme: ThemeData(
         primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+        //  visualDensity: VisualDensity.adaptivePlatformDensity,
         textTheme: const TextTheme(
-          bodyMedium: TextStyle(fontSize: 18),
-          labelLarge: TextStyle(fontSize: 18),
+          bodyMedium: TextStyle(fontSize: 14), // Ajustado para 14
+          labelLarge: TextStyle(fontSize: 14), // Ajustado para 14
         ),
         appBarTheme: const AppBarTheme(
-          toolbarTextStyle: TextStyle(fontSize: 18, color: Colors.white),
+          backgroundColor: Colors.blue,
           titleTextStyle: TextStyle(
-              fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white), // Ajustado para 20
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
-            textStyle: const TextStyle(fontSize: 18),
+            textStyle: const TextStyle(fontSize: 14), // Ajustado para 14
             padding: const EdgeInsets.symmetric(vertical: 12),
           ),
         ),
         inputDecorationTheme: const InputDecorationTheme(
-          labelStyle: TextStyle(fontSize: 18),
+          labelStyle: TextStyle(fontSize: 14), // Ajustado para 14
         ),
       ),
       localizationsDelegates: const [
