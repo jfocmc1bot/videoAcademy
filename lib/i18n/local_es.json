@@ -1,0 +1,15 @@
+{
+    "welcome": "Bienvenido a Video App",
+    "video_list": "Lista de Videos",
+    "none_found": "No se encontraron videos!",
+    "add_favorites": "Agregado a favoritos!",
+    "remove_favorites": "Eliminado de favoritos!",
+    "no_connection": "Sin Conexión a Internet",
+    "no_wifi": "¿Usar Datos Móviles?",
+    "no_wifi_desc": "No estás conectado a Wi-Fi. ¿Quieres continuar usando datos móviles?",
+    "home": "Inicio",
+    "favorites": "Favoritos",
+    "profile": "Perfil",
+    "yes": "Sí",
+    "no": "No"
+}
