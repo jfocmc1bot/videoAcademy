@@ -67,7 +67,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
 
       setState(() {
         _videos = videos;
-        _filteredVideos = videos;
+        _filterFavoritesAndSearch();
         _isLoading = false;
       });
     } catch (error) {
@@ -89,46 +89,58 @@ class _VideoListScreenState extends State<VideoListScreen> {
   Future<void> _loadFavoriteVideoIds() async {
     final favoriteVideoIds = await _favoriteService.getFavoriteVideoIds();
     setState(() {
-      _favoriteVideoIds = favoriteVideoIds.toSet();
+      _favoriteVideoIds = favoriteVideoIds;
       _updateFavorites();
     });
   }
 
   void _updateFavorites() {
     setState(() {
-      _filteredVideos = _videos.map((video) {
+      _videos.forEach((video) {
         video.isFavorite = _favoriteVideoIds.contains(video.id);
-        return video;
-      }).toList();
+      });
+      _filterFavoritesAndSearch();
     });
   }
 
   void _toggleFavorite(Video video) async {
-    bool isFavorited = video.isFavorite;
-
-    setState(() {
-      video.isFavorite = !isFavorited;
-    });
-
     await _favoriteService.toggleFavorite(video.id);
 
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(video.isFavorite
-          ? CustomLocalizations.of(context)!.translate('add_favorites')
-          : CustomLocalizations.of(context)!.translate('remove_favorites')),
-    ));
+    setState(() {
+      if (video.isFavorite) {
+        video.isFavorite = false;
+        _favoriteVideoIds.remove(video.id);
+      } else {
+        video.isFavorite = true;
+        _favoriteVideoIds.add(video.id);
+      }
+    });
 
-    _loadFavoriteVideoIds(); // Recarrega a lista de favoritos do serviço
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(video.isFavorite
+            ? CustomLocalizations.of(context)!.translate('add_favorites')
+            : CustomLocalizations.of(context)!.translate('remove_favorites')),
+      ),
+    );
   }
 
   void _onSearch(String searchTerm) {
     setState(() {
       _searchTerm = searchTerm;
-      _filteredVideos = _videos.where((video) {
-        final title = video.title[_defaultLanguage] ?? '';
-        return title.toLowerCase().contains(_searchTerm.toLowerCase());
-      }).toList();
+      _filterFavoritesAndSearch();
     });
+  }
+
+  void _filterFavoritesAndSearch() {
+    _filteredVideos = _videos.where((video) {
+      final matchesFavorite = !_isShowingFavorites || video.isFavorite;
+      final matchesSearch = video.title[_defaultLanguage]
+              ?.toLowerCase()
+              .contains(_searchTerm.toLowerCase()) ??
+          false;
+      return matchesFavorite && matchesSearch;
+    }).toList();
   }
 
   Future<void> _playVideo(Video video) async {
@@ -211,9 +223,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
       onFavoriteToggle: () {
         setState(() {
           _isShowingFavorites = !_isShowingFavorites;
-          _filteredVideos = _isShowingFavorites
-              ? _videos.where((video) => video.isFavorite).toList()
-              : _videos;
+          _filterFavoritesAndSearch();
         });
       },
       searchTerm: _searchTerm,
@@ -259,9 +269,7 @@ class _VideoListScreenState extends State<VideoListScreen> {
         onTap: (index) {
           setState(() {
             _isShowingFavorites = index == 1;
-            _filteredVideos = _isShowingFavorites
-                ? _videos.where((video) => video.isFavorite).toList()
-                : _videos;
+            _filterFavoritesAndSearch();
           });
         },
       ),
