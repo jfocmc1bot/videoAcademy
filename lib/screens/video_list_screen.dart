@@ -70,6 +70,10 @@ class _VideoListScreenState extends State<VideoListScreen> {
         _filterFavoritesAndSearch();
         _isLoading = false;
       });
+
+      // Chamar a função de limpeza dos favoritos
+      await _favoriteService.clearNonExistentFavorites();
+      await _loadFavoriteVideoIds(); // Recarregar favoritos
     } catch (error) {
       setState(() {
         _isLoading = false;
