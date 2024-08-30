@@ -2,6 +2,32 @@
 
 Este módulo fornece funcionalidades para listar e reproduzir vídeos, com suporte a múltiplos idiomas e integração com o Firebase.
 
+```
+lib/
+│
+├── i18n/
+│   ├── custom_localizations_delegate.dart
+│   ├── local_en.json
+│   ├── local_es.json
+│   └── local_pt.json
+├── main.dart
+├── firebase_options.dart
+├── models/
+│   └── video_model.dart
+├── screens/
+│   ├── video_list_screen.dart
+│   ├── video_player_screen.dart
+│   └── widgets/
+│       ├── app_bar_widget.dart
+│       ├── bottom_navigation_bar_widget.dart
+│       ├── video_search_delegate_widget.dart
+│       └── video_tile_widget.dart
+└── services/
+    ├── connectivity_service.dart
+    ├── device_info_service.dart
+    └── favorite_service.dart
+```
+
 ## Instalação
 
 1. Adicione as seguintes dependências ao seu `pubspec.yaml`:
