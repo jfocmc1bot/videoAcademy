@@ -187,8 +187,6 @@ Certifique-se de que as regras de segurança do Firestore permitam a leitura des
 - Certifique-se de que as regras de segurança do Firebase permitam leitura dos dados de vídeo.
 - O módulo usa o pacote `youtube_player_flutter` para reprodução de vídeos do YouTube. Certifique-se de que seu aplicativo tem as permissões necessárias para reprodução de vídeo e acesso à internet.
 
-Você tem razão, e peço desculpas pela omissão. Vou adicionar essas informações importantes ao README.md. Aqui está a seção adicional que deve ser incluída:
-
 ## Configuração para iOS e Android
 
 ### iOS
