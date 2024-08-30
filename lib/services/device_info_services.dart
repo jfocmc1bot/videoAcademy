@@ -1,10 +1,7 @@
 // lib/services/device_info_service.dart
 
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 import 'connectivity_service.dart';
 
