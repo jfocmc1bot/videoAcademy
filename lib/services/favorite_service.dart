@@ -2,15 +2,13 @@
 
 import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../models/video_model.dart';
 
 class FavoriteService {
   static const String _favoriteVideosKey = 'favoriteVideos';
 
   Future<List<String>> _getFavoriteVideosFromPref() async {
     final prefs = await SharedPreferences.getInstance();
-    final favoriteVideos = prefs.getStringList(_favoriteVideosKey) ?? [];
-    return favoriteVideos;
+    return prefs.getStringList(_favoriteVideosKey) ?? [];
   }
 
   Future<void> _saveFavoriteVideosToPref(List<String> favoriteVideos) async {
@@ -18,8 +16,9 @@ class FavoriteService {
     await prefs.setStringList(_favoriteVideosKey, favoriteVideos);
   }
 
-  Future<List<String>> getFavoriteVideoIds() async {
-    return await _getFavoriteVideosFromPref();
+  Future<Set<String>> getFavoriteVideoIds() async {
+    final favoriteVideos = await _getFavoriteVideosFromPref();
+    return favoriteVideos.toSet();
   }
 
   Future<void> toggleFavorite(String videoId) async {
@@ -30,9 +29,5 @@ class FavoriteService {
       favoriteVideos.add(videoId);
     }
     await _saveFavoriteVideosToPref(favoriteVideos);
-  }
-
-  Future<void> clearFavorites() async {
-    await _saveFavoriteVideosToPref([]);
   }
 }
