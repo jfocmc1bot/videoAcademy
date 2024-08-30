@@ -32,6 +32,62 @@ lib/
     └── favorite_service.dart
 ```
 
+## Diagrama de Classes
+```
+                                  ,---------------.                                               
+                                  |main           |                                               
+                                  |---------------|                                               
+                                  |- init Firebase|                                               
+                                  |- runApp(MyApp)|                                               
+                                  `---------------'                                               
+                                           |                                                      
+                                           |                                                      
+                             ,-------------------------.                                          
+                             |MyApp                    |                                          
+                             |-------------------------|                                          
+                             |- builds MaterialApp     |                                          
+                             |- home: VideoListScreen()|                                          
+                             `-------------------------'                                          
+                                           |                                                      
+                     ,------------------------------------------.                                 
+                     |VideoListScreen                           |                                 
+                     |------------------------------------------|                                 
+                     |- _VideoListScreenState                   |                                 
+                     |- initState()                             |                                 
+                     |-- fetchVideos()                          |                                 
+                     |--- Firestore Query                       |                                 
+                     |--- Preenche _videos                      |                                 
+                     |-- loadFavoriteVideoIds()                 |                                 
+                     |--- Preenche _favoriteVideoIds            |                                 
+                     |--- _updateFavorites()                    |                                 
+                     |---- Atualiza status isFavorite dos vídeos|                                 
+                     |---- _filterFavoritesAndSearch()          |                                 
+                     |----- Aplica filtro e busca na lista      |                                 
+                     |- build()                                 |                                 
+                     |-- Renderiza UI                           |                                 
+                     |-- Lista de Vídeos [ _filteredVideos ]    |                                 
+                     |-- botões de favoritos                    |                                 
+                     |--- onPressed: _toggleFavorite(video)     |                                 
+                     |---- Alterna isFavorite                   |                                 
+                     |---- Atualiza SharedPreferences           |                                 
+                     |-- botão PLAY                             |                                 
+                     `------------------------------------------'                                 
+                                                                                                  
+                                                                                                  
+  |,-------------------.   ,-----------------------------.            ,--------------------------.
+  ||ConnectivityService|   |FavoriteService              |            |VideoPlayerScreen         |
+  ||-------------------|   |-----------------------------|            |--------------------------|
+  ||- Verifica Conexão |   |- toggleFavorite(video.id)   |            |- Exibe o vídeo do YouTube|
+  ||- Alerta de conexão|   |- clearNonExistentFavorites()|            `--------------------------'
+  |`-------------------'   `-----------------------------'                                        
+                                                                                                  
+                  ,-------------------------------.   ,------------------.                        
+                  |SharedPreferences              |   |Firestore         |                        
+                  |-------------------------------|   |------------------|                        
+                  |- Armazena favoritos localmente|   |- Coleção 'videos'|                        
+                  `-------------------------------'   `------------------'                        
+```
+
 ## Instalação
 
 1. Adicione as seguintes dependências ao seu `pubspec.yaml`:
